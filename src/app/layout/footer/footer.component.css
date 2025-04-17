@@ -1,0 +1,11 @@
+.main-footer {
+  background-color: #ff5a36;
+  color: white;
+  text-align: center;
+  padding: 1.5rem 1rem;
+  font-size: 0.9rem;
+
+  p {
+    margin: 0.3rem 0;
+  }
+}

@@ -1,0 +1,51 @@
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ff5a36;
+  padding: 1rem 2rem;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  .logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+
+  .auth-links {
+    a {
+      margin-left: 1rem;
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      position: relative;
+      transition: color 0.3s ease;
+
+      &::after {
+        content: '';
+        display: block;
+        width: 0;
+        height: 2px;
+        background: white;
+        transition: width 0.3s;
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+      }
+
+      &:hover {
+        color: #ffe4d1;
+
+        &::after {
+          width: 100%;
+        }
+      }
+
+      &.active {
+        font-weight: 700;
+        color: #ffe4d1;
+      }
+    }
+  }
+}

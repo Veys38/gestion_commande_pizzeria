@@ -1,0 +1,41 @@
+@for (pizza of pizzas; track pizza.id) {
+  <ul>
+    <li>
+      <p-checkbox
+        [(ngModel)]="selectedPizzas[pizza.pizzaName]"
+        binary="true"
+        inputId="pizza_{{ pizza.pizzaName }}"
+      />
+      <label for="pizza_{{ pizza.pizzaName }}" class="ml-2">
+        🍕 {{ pizza.pizzaName }} - {{ pizza.price }}€
+      </label>
+
+
+
+
+
+      @if (selectedPizzas[pizza.pizzaName]) {
+
+          @for (ingredient of pizza.ingredients; track ingredient.id){
+            <ul class="ml-4">
+              <li>
+                <p-checkbox
+                  [(ngModel)]="selectedIngredients[ingredient.name]"
+                  binary="true"
+                  inputId="pizza_{{ ingredient.name }}"
+                />
+                <label for="pizza_{{ ingredient.name }}" class="ml-2">
+                  🧂 {{ ingredient.name }}
+                </label>
+              </li>
+            </ul>
+          }
+      }
+
+
+    </li>
+  </ul>
+}
+
+<span>Hello</span>
+

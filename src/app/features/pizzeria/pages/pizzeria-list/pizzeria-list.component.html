@@ -1,0 +1,14 @@
+<h1>Helloooo</h1>
+<p-accordion [multiple]="true" [(value)]="activePanels">
+  @for (pizzeria of pizzerias; track pizzeria.id; let i = $index) {
+    <p-accordion-panel [value]="i">
+      <p-accordion-header class="blanche">
+        {{ pizzeria.id }} - {{ pizzeria.name }}
+      </p-accordion-header>
+      <p-accordion-content>
+        <strong>Address : {{pizzeria.address}}</strong>
+        <app-pizza-list></app-pizza-list>
+      </p-accordion-content>
+    </p-accordion-panel>
+  }
+</p-accordion>

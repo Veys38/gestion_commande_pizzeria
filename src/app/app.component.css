@@ -1,0 +1,27 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  flex-shrink: 0;
+}
+
+nav {
+  flex-shrink: 0;
+}
+
+main {
+  flex-grow: 1;
+  padding: 2rem;
+  background: #f7f7f7;
+}
+
+footer {
+  flex-shrink: 0;
+  background: #222;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+}
