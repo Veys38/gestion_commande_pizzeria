@@ -1,7 +1,9 @@
+
 :host {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+
 }
 
 header {
@@ -15,13 +17,17 @@ nav {
 main {
   flex-grow: 1;
   padding: 2rem;
-  background: #f7f7f7;
 }
 
 footer {
   flex-shrink: 0;
-  background: #222;
   color: white;
   text-align: center;
-  padding: 1rem;
 }
+html,body{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+}
+

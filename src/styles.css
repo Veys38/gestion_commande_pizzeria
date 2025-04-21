@@ -1,1 +1,24 @@
-/* You can add global styles to this file, and also import other style files */
+:host{
+
+}
+body, app-root {
+  width: 100%;
+  font-family: "Playpen Sans", cursive;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+  }
+
+
+
+  html{
+    background-image: url("../sebali.jpg");
+
+  }
+html,body{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+}
+

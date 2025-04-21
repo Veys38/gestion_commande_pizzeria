@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {PizzeriaShortDtoModel} from '../../pizzeria/models/PizzeriaShortDtoModel';
 import {environment} from '../../../../environments/environment';
+import {IngredientPriceDto} from '../models/IngredientPriceDto';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +13,6 @@ export class IngredientService {
   constructor() { }
 
   findAll() {
-    return this._http.get<PizzeriaShortDtoModel[]>(environment.API_URL + "/pizzeria");
+    return this._http.get<IngredientPriceDto[]>(environment.API_URL + "/ingredient");
   }
 }

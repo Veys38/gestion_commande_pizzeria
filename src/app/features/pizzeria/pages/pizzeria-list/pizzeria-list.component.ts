@@ -12,18 +12,19 @@ import {
 } from 'primeng/accordion';
 import { CommonModule } from '@angular/common';
 import {PizzaListComponent} from '../../../pizza/components/pizza-list/pizza-list.component';
+import {AddIngredientComponent} from "../../../pizza_ingredient/components/add-ingredient/add-ingredient.component";
 
 @Component({
   selector: 'app-pizzeria-list',
   standalone: true,
-  imports: [
-    CommonModule,
-    Accordion,
-    AccordionPanel,
-    AccordionHeader,
-    AccordionContent,
-    PizzaListComponent,
-  ],
+    imports: [
+        CommonModule,
+        Accordion,
+        AccordionPanel,
+        AccordionHeader,
+        AccordionContent,
+        PizzaListComponent,
+    ],
   templateUrl: './pizzeria-list.component.html',
   styleUrl: './pizzeria-list.component.css'
 })

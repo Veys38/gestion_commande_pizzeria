@@ -1,41 +1,68 @@
-@for (pizza of pizzas; track pizza.id) {
-  <ul>
-    <li>
-      <p-checkbox
-        [(ngModel)]="selectedPizzas[pizza.pizzaName]"
-        binary="true"
-        inputId="pizza_{{ pizza.pizzaName }}"
-      />
-      <label for="pizza_{{ pizza.pizzaName }}" class="ml-2">
-        🍕 {{ pizza.pizzaName }} - {{ pizza.price }}€
-      </label>
+<div class="bloc global">
+  <div class="bloc-gauche">
+    @for (pizza of pizzas; track pizza.id) {
+      <ul>
+        <li>
+          <p-checkbox
+            [(ngModel)]="selectedPizzas[pizza.pizzaName]"
+            binary="true"
+            inputId="pizza_{{ pizza.pizzaName }}"
+          />
+          <label for="pizza_{{ pizza.pizzaName }}" class="ml-2">
+            🍕 {{ pizza.pizzaName }} - {{ pizza.price }}€
+          </label>
 
-
-
-
-
-      @if (selectedPizzas[pizza.pizzaName]) {
-
-          @for (ingredient of pizza.ingredients; track ingredient.id){
+          @if (selectedPizzas[pizza.pizzaName]) {
             <ul class="ml-4">
-              <li>
-                <p-checkbox
-                  [(ngModel)]="selectedIngredients[ingredient.name]"
-                  binary="true"
-                  inputId="pizza_{{ ingredient.name }}"
-                />
-                <label for="pizza_{{ ingredient.name }}" class="ml-2">
-                  🧂 {{ ingredient.name }}
-                </label>
-              </li>
+              @for (ingredient of pizza.ingredients; track ingredient.id) {
+                <li>
+                  <p-checkbox
+                    [(ngModel)]="selectedIngredients[pizza.pizzaName][ingredient.name]"
+                    binary="true"
+                    inputId="pizza_{{ pizza.pizzaName }}_ingredient_{{ ingredient.name }}"
+                  />
+                  <label for="pizza_{{ pizza.pizzaName }}_ingredient_{{ ingredient.name }}" class="ml-2">
+                    🧂 {{ ingredient.name }}
+                  </label>
+                </li>
+              }
+
+
             </ul>
           }
+        </li>
+      </ul>
+    }
+
+
+  </div>
+  <div class="bloc-droite">
+    <h3>Tes choix : </h3>
+    <ul>
+      @for (pizza of pizzas; track pizza.id){
+        @if (selectedPizzas[pizza.pizzaName]){
+          <li>
+            <strong>{{ pizza.pizzaName }}</strong>
+          </li>
+        }
+
       }
+      <p-accordion>
+        <p-accordionTab header="Ajouter un ingrédient">
+          <app-add-ingredient></app-add-ingredient>
+        </p-accordionTab>
+      </p-accordion>
 
+    </ul>
+    <p><strong>Somme : </strong> {{ getTotalPrice() }}</p>
+    <input type="number" placeholder="Quantité">
+    <p-button>Valider 🔜</p-button>
+  </div>
 
-    </li>
-  </ul>
-}
+  <div class="encore-plus-a-droite">
+    <h3> Commande finale : </h3>
 
-<span>Hello</span>
+  </div>
+
+</div>
 
