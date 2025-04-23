@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, EventEmitter, inject, Output} from '@angular/core';
 import {PizzaService} from '../../service/pizza.service';
 import {FormsModule} from '@angular/forms';
 import {Checkbox} from 'primeng/checkbox';
@@ -32,30 +32,64 @@ export class PizzaListComponent {
   ingredients!: IngredientPriceDto[];
 
   selectedPizzas: { [key: string]: boolean } = {};
+  selectedPizzaName: string | null = null;
+
+  isValidated: boolean = false;
+
   selectedIngredients: { [pizzaName: string]: { [ingredientName: string]: boolean } } = {};
   selectedAdditionalIngredients: { [key: string]: boolean } = {};
 
+  quantities: number = 1;
+
+  validatedTickets: {
+    pizzaName: string;
+    ingredients: string[];
+    ingredientSupplement: string[];
+    quantity: number;
+  }[] = [];
 
 
-        constructor()
-        {
-          this._pizzaService.findAllWithIngredients().subscribe({
-            next: datas => {
-              this.pizzas = datas;
+  onAdditionalIngredientsChange(updatedIngredients: { [key: string]: boolean }) {
+    this.selectedAdditionalIngredients = updatedIngredients;
+  }
 
-              for (const pizza of this.pizzas) {
-                this.selectedPizzas[pizza.pizzaName] = false;
+  constructor() {
+    this._pizzaService.findAllWithIngredients().subscribe({
+      next: datas => {
+        this.pizzas = datas;
 
-                this.selectedIngredients[pizza.pizzaName] = {};
-                for (const ingredient of pizza.ingredients) {
-                  this.selectedIngredients[pizza.pizzaName][ingredient.name] = true;
-                }
-              }
-            },
-            error: err => console.log(err),
-          });
+        for (const pizza of this.pizzas) {
+          this.selectedPizzas[pizza.pizzaName] = false;
+
+          this.selectedIngredients[pizza.pizzaName] = {};
+          for (const ingredient of pizza.ingredients) {
+            this.selectedIngredients[pizza.pizzaName][ingredient.name] = true;
+          }
         }
+      },
+      error: err => console.log(err),
+    });
+    this._ingredientService.findAll().subscribe({
+      next: data => {
+        this.ingredients = data;
+        for (const ingredient of this.ingredients) {
+          this.selectedAdditionalIngredients[ingredient.name] = false;
+        }
+      }
+    });
 
+  }
+
+
+  selectPizza(pizzaName: string): void {
+    if (!this.selectedPizzaName) {
+      this.selectedPizzaName = pizzaName;
+      this.selectedPizzas[pizzaName] = true;
+    } else if (this.selectedPizzaName === pizzaName) {
+      this.selectedPizzaName = null;
+      this.selectedPizzas[pizzaName] = false;
+    }
+  }
 
 
   getTotalPrice(): number {
@@ -67,16 +101,70 @@ export class PizzaListComponent {
       if (this.selectedPizzas[pizza.pizzaName]) {
         total += pizza.price;
 
-        for (const ingredient of pizza.ingredients) {
-          if (this.selectedIngredients[pizza.pizzaName]?.[ingredient.name]) {
+        if (!this.ingredients) return total;
 
-          }else if (!this.selectedIngredients[pizza.pizzaName]?.[ingredient.name]){
+        for (const ingredient of pizza.ingredients) {
+          if (!this.selectedIngredients[pizza.pizzaName]?.[ingredient.name]) {
             total -= ingredient.price;
           }
+
         }
       }
     }
-    return total;
+    for (const ingredient of this.ingredients) {
+      if (this.selectedAdditionalIngredients[ingredient.name]) {
+        total += ingredient.price;
+      }
+    }
+
+    return Math.round((total * this.quantities) * 100) / 100;
+  }
+
+
+
+  ajouterPizzaAuTicket(){
+    const pizza = this.pizzas.find(p => p.pizzaName === this.selectedPizzaName);
+    const selected = this.selectedIngredients[this.selectedPizzaName!];
+    const additionalSelected = this.selectedAdditionalIngredients;
+
+    const entries = Object.entries(selected);
+    const filtered = entries.filter(([_,checked]) => checked);
+    const maped = filtered.map(([name])=>name);
+
+    const additionalIngredients = Object.entries(additionalSelected).filter(([_,checked]) => checked).map((([name])=>name));
+
+
+    if (!pizza) {
+      return;
+    }
+
+    this.validatedTickets.push({ pizzaName: pizza.pizzaName, ingredients: maped, ingredientSupplement: additionalIngredients ,quantity: this.quantities });
+
+    this.resetSelection();
+  }
+
+  resetSelection(){
+    for (const pizza of this.pizzas) {
+      this.selectedPizzas[pizza.pizzaName] = false;
+      this.selectedIngredients[pizza.pizzaName] = {};
+    }
+    this.selectedPizzaName = null;
+    for (const ingredient of this.ingredients) {
+      this.selectedAdditionalIngredients[ingredient.name] = false;
+    }
+    this.quantities = 1;
+  }
+
+
+  deletePizza(name: string): void {
+
+    // this.validatedTickets.filter()
+  }
+
+
+  validatePizza():void{
+    this.isValidated=true;
+    this.selectedPizzaName = null;
   }
 
 

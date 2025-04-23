@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
 import {Checkbox} from 'primeng/checkbox';
 import {FormsModule} from '@angular/forms';
 import {IngredientService} from '../../services/ingredient.service';
@@ -18,8 +18,10 @@ export class AddIngredientComponent {
   private readonly _ingredientService: IngredientService = inject(IngredientService);
 
   ingredients!: IngredientPriceDto[];
-
   selectedIngredient: { [key: string]: boolean } = {};
+
+  @Output() ingredientEmet = new EventEmitter<{[key: string]: boolean}>();
+  @Input() ingredientsAlreadyAdded: { [ingredientName: string]: boolean } = {};
 
   constructor()
   {
@@ -33,6 +35,10 @@ export class AddIngredientComponent {
       },
       error: err => console.log(err),
     });
+  }
+
+  onIngredientChange() {
+    this.ingredientEmet.emit(this.selectedIngredient);
   }
 
 }

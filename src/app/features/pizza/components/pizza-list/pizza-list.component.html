@@ -1,11 +1,14 @@
 <div class="bloc global">
   <div class="bloc-gauche">
+    <h3>1 - Choisis ta pizza : </h3>
     @for (pizza of pizzas; track pizza.id) {
       <ul>
         <li>
           <p-checkbox
-            [(ngModel)]="selectedPizzas[pizza.pizzaName]"
-            binary="true"
+            [binary]="true"
+            [disabled]="!!selectedPizzaName && selectedPizzaName !== pizza.pizzaName && !isValidated"
+            [ngModel]="selectedPizzaName === pizza.pizzaName"
+            (onChange)="selectPizza(pizza.pizzaName)"
             inputId="pizza_{{ pizza.pizzaName }}"
           />
           <label for="pizza_{{ pizza.pizzaName }}" class="ml-2">
@@ -35,33 +38,96 @@
     }
 
 
+
+<!--    -->
+
+
+
+
+
+
   </div>
-  <div class="bloc-droite">
-    <h3>Tes choix : </h3>
+  <form class="bloc-droite" (ngSubmit)="ajouterPizzaAuTicket()" >
+    <h3>2 - Personnalise ta pizza : </h3>
     <ul>
       @for (pizza of pizzas; track pizza.id){
         @if (selectedPizzas[pizza.pizzaName]){
           <li>
-            <strong>{{ pizza.pizzaName }}</strong>
+            🍕 <strong>{{ pizza.pizzaName }}</strong>
           </li>
         }
 
       }
       <p-accordion>
         <p-accordionTab header="Ajouter un ingrédient">
-          <app-add-ingredient></app-add-ingredient>
+          <app-add-ingredient
+            (ingredientEmet)="onAdditionalIngredientsChange($event)"
+            [ingredientsAlreadyAdded]="selectedIngredients[selectedPizzaName!]"
+          >
+          </app-add-ingredient>
         </p-accordionTab>
       </p-accordion>
 
     </ul>
-    <p><strong>Somme : </strong> {{ getTotalPrice() }}</p>
-    <input type="number" placeholder="Quantité">
-    <p-button>Valider 🔜</p-button>
-  </div>
+    <div class="quantity-container">
+      <label for="quantityInput">Quantité de pizza : </label>
+      <input
+        id="quantityInput"
+        type="number"
+        [(ngModel)]="quantities"
+        name="quantities"
+        min="1"
+        class="quantity-input"
+        value="1"
+      />
+    </div>
+
+    <p><strong>La somme : </strong> {{ getTotalPrice() }} € </p>
+
+    <p-button type="submit">Valider 🔜</p-button>
+  </form>
+
+
+
+
+
+
+<!--  -->
+
+
+
+
+
 
   <div class="encore-plus-a-droite">
-    <h3> Commande finale : </h3>
+    <div class="ticket">
+      <div class="ticket-block">
+        <div class="ticket-header">
+          <h3>Pizzeria Name</h3>
+          <p>------------------------------</p>
+          <small>Votre ticket du ../../....</small>
+          <p>------------------------------</p>
+        </div>
+        <div class="ticket-body">
+            @for (item of validatedTickets; track item.pizzaName){
+              <p>{{item.quantity}} x {{item.pizzaName}} <button (click)="deletePizza(item.pizzaName)">Supprimer</button></p>
+              @for (ingredientSupp of item.ingredientSupplement; track ingredientSupp){
+                <p><button>-</button> {{ingredientSupp}}</p>
+              }
+            }
+            <p>..............................</p>
+        </div>
 
+        <div class="ticket-footer">
+          <p>******************************</p>
+          @if (validatedTickets){
+
+            <button>Passer commande</button>
+          }
+        </div>
+      </div>
+
+    </div>
   </div>
 
 </div>

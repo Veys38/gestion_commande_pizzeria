@@ -6,7 +6,9 @@
         {{ pizzeria.id }} - {{ pizzeria.name }} <span>(à 5km de chez toi)</span>
       </p-accordion-header>
       <p-accordion-content>
+        <div>
         <strong>📍 {{pizzeria.address}}</strong>
+        </div>
         <app-pizza-list></app-pizza-list>
       </p-accordion-content>
     </p-accordion-panel>

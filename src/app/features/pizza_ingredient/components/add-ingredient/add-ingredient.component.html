@@ -1,15 +1,19 @@
 <p>Ingrédients supplémentaires : </p>
 @for (ingredient of ingredients; track ingredient.id){
-<ul>
-  <li>
-    <p-checkbox
-      [(ngModel)]="selectedIngredient[ingredient.name]"
-      binary="true"
-      inputId="ingredient_{{ingredient.name}}"
-      />
-    <label for="ingredient_{{ingredient.name}}">
-      🥫 {{ingredient.name}} {{ingredient.price}} €
-    </label>
-  </li>
-</ul>
+  @if (ingredientsAlreadyAdded && !ingredientsAlreadyAdded[ingredient.name]){
+    <ul>
+      <li>
+        <p-checkbox
+          [(ngModel)]="selectedIngredient[ingredient.name]"
+          binary="true"
+          inputId="ingredient_{{ingredient.name}}"
+          (onChange)="onIngredientChange()"
+        />
+        <label for="ingredient_{{ingredient.name}}">
+          🥫 {{ingredient.name}} {{ingredient.price}} €
+        </label>
+      </li>
+    </ul>
+  }
+
 }
