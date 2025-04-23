@@ -41,11 +41,14 @@ export class PizzaListComponent {
 
   quantities: number = 1;
 
+  finalPriceTotal: number = 0;
+
   validatedTickets: {
     pizzaName: string;
     ingredients: string[];
-    ingredientSupplement: string[];
+    ingredientSupplement: {name:string, price: number}[];
     quantity: number;
+    totalTicketPrice: number;
   }[] = [];
 
 
@@ -121,8 +124,11 @@ export class PizzaListComponent {
   }
 
 
-
   ajouterPizzaAuTicket(){
+    if (!this.selectedPizzaName || !this.selectedIngredients[this.selectedPizzaName]) {
+      return;
+    }
+
     const pizza = this.pizzas.find(p => p.pizzaName === this.selectedPizzaName);
     const selected = this.selectedIngredients[this.selectedPizzaName!];
     const additionalSelected = this.selectedAdditionalIngredients;
@@ -131,14 +137,16 @@ export class PizzaListComponent {
     const filtered = entries.filter(([_,checked]) => checked);
     const maped = filtered.map(([name])=>name);
 
-    const additionalIngredients = Object.entries(additionalSelected).filter(([_,checked]) => checked).map((([name])=>name));
+    const additionalIngredients = Object.entries(additionalSelected).filter(([_,checked]) => checked).map((([name])=> {name}));
+    const additionalIngredientPrice = Object.entries(additionalSelected).filter(([_,checked]) => checked).map((([price])=>price));
 
+    this.finalPriceTotal += this.getTotalPrice();
 
     if (!pizza) {
       return;
     }
 
-    this.validatedTickets.push({ pizzaName: pizza.pizzaName, ingredients: maped, ingredientSupplement: additionalIngredients ,quantity: this.quantities });
+    // this.validatedTickets.push({ pizzaName: pizza.pizzaName, ingredients: maped, ingredientSupplement: additionalIngredients ,quantity: this.quantities, totalTicketPrice: this.getTotalPrice()});
 
     this.resetSelection();
   }
@@ -146,7 +154,7 @@ export class PizzaListComponent {
   resetSelection(){
     for (const pizza of this.pizzas) {
       this.selectedPizzas[pizza.pizzaName] = false;
-      this.selectedIngredients[pizza.pizzaName] = {};
+      // this.selectedIngredients[pizza.pizzaName] = {};
     }
     this.selectedPizzaName = null;
     for (const ingredient of this.ingredients) {
@@ -156,9 +164,24 @@ export class PizzaListComponent {
   }
 
 
-  deletePizza(name: string): void {
+  deletePizza(j:number): void {
+    const ligneDeTicket = this.validatedTickets[j];
+    this.finalPriceTotal -= ligneDeTicket.totalTicketPrice;
+    if(ligneDeTicket.quantity <= 1){
+      this.validatedTickets.splice(j, 1);
+    }else if(ligneDeTicket.quantity > 1) {
+      ligneDeTicket.quantity -= 1;
+    }
 
-    // this.validatedTickets.filter()
+  }
+
+  deleteIngredient(j:number, i:number): void {
+    const ligneDeTicket = this.validatedTickets[j];
+    const ingDeTicketDePizza = this.validatedTickets[i];
+
+    this.validatedTickets[j].ingredientSupplement.splice(i, 1);
+    this.finalPriceTotal -= ingDeTicketDePizza.totalTicketPrice;
+
   }
 
 

@@ -109,10 +109,10 @@
           <p>------------------------------</p>
         </div>
         <div class="ticket-body">
-            @for (item of validatedTickets; track item.pizzaName){
-              <p>{{item.quantity}} x {{item.pizzaName}} <button (click)="deletePizza(item.pizzaName)">Supprimer</button></p>
-              @for (ingredientSupp of item.ingredientSupplement; track ingredientSupp){
-                <p><button>-</button> {{ingredientSupp}}</p>
+            @for (item of validatedTickets; let j = $index; track j){
+              <p>{{item.quantity}} x {{item.pizzaName}} <button (click)="deletePizza(j)">Supprimer</button></p>
+              @for (ingredientSupp of item.ingredientSupplement; let i = $index; track i){
+                <p (click)="deleteIngredient(j,i)"><button>-</button> {{ingredientSupp}}</p>
               }
             }
             <p>..............................</p>
@@ -120,8 +120,8 @@
 
         <div class="ticket-footer">
           <p>******************************</p>
-          @if (validatedTickets){
-
+          @if (validatedTickets.length > 0){
+            <p>{{finalPriceTotal}} €</p>
             <button>Passer commande</button>
           }
         </div>
