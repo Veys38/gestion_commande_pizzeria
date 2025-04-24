@@ -1,25 +1,10 @@
-.main-nav {
-  display: flex;
-  justify-content: center;
-  background-color: #fff;
-  padding: 1rem;
-  border-bottom: 2px solid #ff5a36;
 
-  a {
-    margin: 0 1rem;
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    position: relative;
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: #ff5a36;
-    }
-
-    &.active {
-      color: #ff5a36;
-      font-weight: 700;
-    }
-  }
+  div{
+    background-image: url("../nav.png");
+    height: 15px;
+    padding: 25rem;
+}
+img{
+  width: 100%;
+  height: 100%;
 }

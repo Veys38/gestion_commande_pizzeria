@@ -3,7 +3,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #ff5a36;
+  background-image: url("../header.jpg");
   padding: 1rem 2rem;
   color: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -16,6 +16,16 @@
 
   strong{
     font-weight: 800;
+    font-family: "Zain", sans-serif;
+    font-weight: 900;
+    color: #dc622e;
+
+  }
+  span{
+    font-weight: 400;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #1e1e1e;
   }
 
   .auth-links {

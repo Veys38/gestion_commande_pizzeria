@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input} from '@angular/core';
 import {PizzaService} from '../../service/pizza.service';
 import {FormsModule} from '@angular/forms';
 import {Checkbox} from 'primeng/checkbox';
@@ -31,6 +31,9 @@ export class PizzaListComponent {
   pizzas!: PizzaWithIngredientDto[];
   ingredients!: IngredientPriceDto[];
 
+  @Input() pizzeriaName!: string;
+
+
   selectedPizzas: { [key: string]: boolean } = {};
   selectedPizzaName: string | null = null;
 
@@ -43,12 +46,14 @@ export class PizzaListComponent {
 
   finalPriceTotal: number = 0;
 
+  currentDate: string = new Date().toLocaleDateString('fr-FR');
+
   validatedTickets: {
     pizzaName: string;
     ingredients: string[];
     ingredientSupplement: {name:string, price: number}[];
     quantity: number;
-    totalTicketPrice: number;
+    ligneTicketPrice: number;
   }[] = [];
 
 
@@ -137,8 +142,13 @@ export class PizzaListComponent {
     const filtered = entries.filter(([_,checked]) => checked);
     const maped = filtered.map(([name])=>name);
 
-    const additionalIngredients = Object.entries(additionalSelected).filter(([_,checked]) => checked).map((([name])=> {name}));
-    const additionalIngredientPrice = Object.entries(additionalSelected).filter(([_,checked]) => checked).map((([price])=>price));
+    const additionalIngredients = Object
+      .entries(additionalSelected)
+      .filter(([_,checked]) => checked)
+      .map(([name])=> {
+        const ingredient = this.ingredients.find(i=>i.name === name);
+        return {name, price: ingredient?.price ?? 0};
+      });
 
     this.finalPriceTotal += this.getTotalPrice();
 
@@ -146,7 +156,13 @@ export class PizzaListComponent {
       return;
     }
 
-    // this.validatedTickets.push({ pizzaName: pizza.pizzaName, ingredients: maped, ingredientSupplement: additionalIngredients ,quantity: this.quantities, totalTicketPrice: this.getTotalPrice()});
+    this.validatedTickets.push({
+      pizzaName: pizza.pizzaName,
+      ingredients: maped,
+      ingredientSupplement: additionalIngredients,
+      quantity: this.quantities,
+      ligneTicketPrice: this.getTotalPrice()
+    });
 
     this.resetSelection();
   }
@@ -164,25 +180,32 @@ export class PizzaListComponent {
   }
 
 
-  deletePizza(j:number): void {
-    const ligneDeTicket = this.validatedTickets[j];
-    this.finalPriceTotal -= ligneDeTicket.totalTicketPrice;
-    if(ligneDeTicket.quantity <= 1){
+  deletePizza(j: number): void {
+    const ticketLine = this.validatedTickets[j];
+
+    if (ticketLine.quantity <= 1) {
+      this.finalPriceTotal -= ticketLine.ligneTicketPrice;
       this.validatedTickets.splice(j, 1);
-    }else if(ligneDeTicket.quantity > 1) {
-      ligneDeTicket.quantity -= 1;
+    } else {
+      const prixUnitaire = ticketLine.ligneTicketPrice / ticketLine.quantity;
+      ticketLine.quantity -= 1;
+      ticketLine.ligneTicketPrice -= prixUnitaire;
+      this.finalPriceTotal -= prixUnitaire;
+    }
+  }
+
+
+  deleteIngredient(pizzaIndex:number, ingredientIndex:number): void {
+    const ticketLine = this.validatedTickets[pizzaIndex];
+    const [removedIngredient] = ticketLine.ingredientSupplement.splice(ingredientIndex, 1);
+
+    if(removedIngredient) {
+      this.finalPriceTotal -= removedIngredient.price;
+      ticketLine.ligneTicketPrice -= removedIngredient.price;
     }
 
   }
 
-  deleteIngredient(j:number, i:number): void {
-    const ligneDeTicket = this.validatedTickets[j];
-    const ingDeTicketDePizza = this.validatedTickets[i];
-
-    this.validatedTickets[j].ingredientSupplement.splice(i, 1);
-    this.finalPriceTotal -= ingDeTicketDePizza.totalTicketPrice;
-
-  }
 
 
   validatePizza():void{

@@ -9,7 +9,7 @@
         <div>
         <strong>📍 {{pizzeria.address}}</strong>
         </div>
-        <app-pizza-list></app-pizza-list>
+        <app-pizza-list [pizzeriaName]="pizzeria.name" ></app-pizza-list>
       </p-accordion-content>
     </p-accordion-panel>
   }

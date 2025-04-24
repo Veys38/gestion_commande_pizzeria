@@ -103,16 +103,16 @@
     <div class="ticket">
       <div class="ticket-block">
         <div class="ticket-header">
-          <h3>Pizzeria Name</h3>
+          <h3>{{this.pizzeriaName}}</h3>
           <p>------------------------------</p>
-          <small>Votre ticket du ../../....</small>
+          <small>Votre ticket du {{currentDate}}</small>
           <p>------------------------------</p>
         </div>
         <div class="ticket-body">
             @for (item of validatedTickets; let j = $index; track j){
               <p>{{item.quantity}} x {{item.pizzaName}} <button (click)="deletePizza(j)">Supprimer</button></p>
               @for (ingredientSupp of item.ingredientSupplement; let i = $index; track i){
-                <p (click)="deleteIngredient(j,i)"><button>-</button> {{ingredientSupp}}</p>
+                <p (click)="deleteIngredient(j,i)"><button>-</button> {{ingredientSupp.name}}</p>
               }
             }
             <p>..............................</p>

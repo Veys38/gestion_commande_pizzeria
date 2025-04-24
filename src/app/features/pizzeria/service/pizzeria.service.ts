@@ -16,4 +16,5 @@ export class PizzeriaService {
     return this._http.get<PizzeriaShortDtoModel[]>(environment.API_URL + "/pizzeria");
   }
 
+
 }
