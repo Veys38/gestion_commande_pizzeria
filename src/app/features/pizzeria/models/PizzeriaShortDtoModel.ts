@@ -3,3 +3,12 @@ export interface PizzeriaShortDtoModel {
   name: string;
   address: string;
 }
+
+export interface PizzeriaDistanceDtoModel {
+  id: number;
+  name: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  distance: number;
+}
