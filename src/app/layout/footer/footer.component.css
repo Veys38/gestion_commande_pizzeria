@@ -1,11 +1,13 @@
 .main-footer {
-  background-color: #ff5a36;
+  background-color: #47361f;
   color: white;
   text-align: center;
   padding: 1.5rem 1rem;
   font-size: 0.9rem;
 
   p {
+    font-family: "Zain", sans-serif;
+
     margin: 0.3rem 0;
   }
 }

@@ -12,8 +12,11 @@ body, app-root {
 
 
   html{
-    background-image: url("../sebali.jpg");
-
+    background-image: url("../public/fond.jpg");
+    background-size: cover; /* OU cover si tu veux remplir */
+    background-repeat: no-repeat;
+    background-position: top;
+    background-color: #000000;
   }
 html,body{
   margin: 0;

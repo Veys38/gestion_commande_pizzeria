@@ -6,7 +6,7 @@
   background-image: url("../header.jpg");
   padding: 1rem 2rem;
   color: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
 
   .logo {
     font-size: 1.8rem;
@@ -18,14 +18,14 @@
     font-weight: 800;
     font-family: "Zain", sans-serif;
     font-weight: 900;
-    color: #dc622e;
+    color: #c69554;
 
   }
   span{
     font-weight: 400;
     font-weight: bold;
     font-size: 1rem;
-    color: #1e1e1e;
+    color: #6e5f4f;
   }
 
   .auth-links {
