@@ -3,15 +3,21 @@
   @for (pizzeria of pizzerias; track pizzeria.id; let i = $index) {
     <p-accordion-panel [value]="i">
       <p-accordion-header class="blanche">
-        {{ pizzeria.id }} - {{ pizzeria.name }} <span>(à 5km de chez toi)</span>
+        🍕 {{ pizzeria.name }} <span>(à {{ pizzeria.distanceKm}} km de chez toi)</span>
+
       </p-accordion-header>
       <p-accordion-content class="custom-accordion-content">
         <div>
         <strong>📍 {{pizzeria.address}}</strong>
         </div>
-        <app-pizza-list [pizzeriaName]="pizzeria.name" ></app-pizza-list>
+        <app-pizza-list [pizzeriaName]="pizzeria.name"
+                        (passerCommande)="onPasserCommande()"></app-pizza-list>
+
       </p-accordion-content>
     </p-accordion-panel>
   }
 </p-accordion>
+<div *ngIf="showCreateOrder" #createOrderSection>
+  <app-create-order></app-create-order>
+</div>
 

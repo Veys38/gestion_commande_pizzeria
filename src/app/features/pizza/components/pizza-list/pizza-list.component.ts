@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input} from '@angular/core';
+import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
 import {PizzaService} from '../../service/pizza.service';
 import {FormsModule} from '@angular/forms';
 import {Checkbox} from 'primeng/checkbox';
@@ -32,6 +32,7 @@ export class PizzaListComponent {
   ingredients!: IngredientPriceDto[];
 
   @Input() pizzeriaName!: string;
+  @Output() passerCommande = new EventEmitter<void>();
 
 
   selectedPizzas: { [key: string]: boolean } = {};
@@ -161,7 +162,7 @@ export class PizzaListComponent {
       ingredients: maped,
       ingredientSupplement: additionalIngredients,
       quantity: this.quantities,
-      ligneTicketPrice: this.getTotalPrice()
+      ligneTicketPrice: Math.round(this.getTotalPrice() * 100) / 100
     });
 
     this.resetSelection();
@@ -185,12 +186,14 @@ export class PizzaListComponent {
 
     if (ticketLine.quantity <= 1) {
       this.finalPriceTotal -= ticketLine.ligneTicketPrice;
+      this.finalPriceTotal = Math.round(this.finalPriceTotal * 100) / 100;
       this.validatedTickets.splice(j, 1);
     } else {
       const prixUnitaire = ticketLine.ligneTicketPrice / ticketLine.quantity;
       ticketLine.quantity -= 1;
       ticketLine.ligneTicketPrice -= prixUnitaire;
       this.finalPriceTotal -= prixUnitaire;
+      this.finalPriceTotal = Math.round(this.finalPriceTotal * 100) / 100;
     }
   }
 
@@ -201,6 +204,7 @@ export class PizzaListComponent {
 
     if(removedIngredient) {
       this.finalPriceTotal -= removedIngredient.price;
+      this.finalPriceTotal = Math.round(this.finalPriceTotal * 100) / 100;
       ticketLine.ligneTicketPrice -= removedIngredient.price;
     }
 
@@ -214,6 +218,7 @@ export class PizzaListComponent {
   }
 
 
+  callConstruction() {
 
-
+  }
 }

@@ -84,7 +84,7 @@
 
     <p><strong>La somme : </strong> {{ getTotalPrice() }} € </p>
 
-    <p-button type="submit">Valider 🔜</p-button>
+    <button type="submit" class="btn-valider">Valider 🔜</button>
   </form>
 
 
@@ -122,7 +122,7 @@
           <p>******************************</p>
           @if (validatedTickets.length > 0){
             <p>{{finalPriceTotal}} €</p>
-            <button>Passer commande</button>
+            <button (click)="passerCommande.emit()">Passer commande</button>
           }
         </div>
       </div>

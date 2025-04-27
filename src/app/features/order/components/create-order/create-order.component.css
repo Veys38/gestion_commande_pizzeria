@@ -1,0 +1,12 @@
+.the-img {
+  margin-top: 1rem;
+  height: 100vh;                       /* hauteur totale si tu veux que ça prenne tout l’écran visible */
+  background-image: url("../../../../../../public/construction.png");
+  background-size: contain;           /* image entière visible */
+  background-repeat: no-repeat;
+  background-position: center center; /* centrée horizontalement et verticalement */
+  background-color: #000;             /* si l’image est plus petite que le bloc */
+  border: 2px solid #c69554;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}

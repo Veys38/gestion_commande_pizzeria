@@ -10,5 +10,5 @@ export interface PizzeriaDistanceDtoModel {
   address: string;
   latitude: number;
   longitude: number;
-  distance: number;
+  distanceKm: number;
 }

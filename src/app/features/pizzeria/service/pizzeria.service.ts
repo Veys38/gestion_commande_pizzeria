@@ -2,6 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {PizzeriaDistanceDtoModel, PizzeriaShortDtoModel} from '../models/PizzeriaShortDtoModel';
 import {environment} from '../../../../environments/environment';
+import {Observable, of} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -45,14 +46,10 @@ export class PizzeriaService {
 
 
 
-  getPizzeriasWithDistance(){
-    if (!this.userLocation) {
-      console.warn("Position utilisateur non encore disponible.");
-      return;
-    }
+  getPizzeriasWithDistance(): Observable<PizzeriaDistanceDtoModel[]> {
+    if (!this.userLocation) return of([]);
     const { latitude, longitude } = this.userLocation;
-    const url = `${environment.API_URL}/pizzeria/with-distance?lat=${latitude}&lon=${longitude}`;
-    return this._http.get<PizzeriaDistanceDtoModel[]>(url);
+    return this._http.get<PizzeriaDistanceDtoModel[]>(`${environment.API_URL}/pizzeria/with-distance?lat=${latitude}&lon=${longitude}`);
   }
 
 }

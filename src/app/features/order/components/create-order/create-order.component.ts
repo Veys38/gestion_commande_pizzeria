@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Input, input} from '@angular/core';
 
 @Component({
   selector: 'app-create-order',
@@ -8,4 +8,5 @@ import { Component } from '@angular/core';
 })
 export class CreateOrderComponent {
 
+  // @Input() orderId: string;
 }
