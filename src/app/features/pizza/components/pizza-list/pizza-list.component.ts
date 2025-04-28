@@ -210,15 +210,4 @@ export class PizzaListComponent {
 
   }
 
-
-
-  validatePizza():void{
-    this.isValidated=true;
-    this.selectedPizzaName = null;
-  }
-
-
-  callConstruction() {
-
-  }
 }

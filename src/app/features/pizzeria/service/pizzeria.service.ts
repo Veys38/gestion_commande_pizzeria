@@ -1,55 +1,44 @@
-import {inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {PizzeriaDistanceDtoModel, PizzeriaShortDtoModel} from '../models/PizzeriaShortDtoModel';
-import {environment} from '../../../../environments/environment';
-import {Observable, of} from 'rxjs';
+import { of, Observable, BehaviorSubject, switchMap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { PizzeriaDistanceDtoModel } from '../models/PizzeriaShortDtoModel';
+import { environment } from '../../../../environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class PizzeriaService {
-
   private readonly _http: HttpClient = inject(HttpClient);
+
+  private userLocationSubject = new BehaviorSubject<{ latitude: number; longitude: number } | null>(null);
+  userLocation$ = this.userLocationSubject.asObservable();
 
   constructor() {
     this.getUserLocation();
   }
 
-  userLocation: { latitude: number; longitude: number } | null = null;
-
-
-
-  findAll() {
-    return this._http.get<PizzeriaShortDtoModel[]>(environment.API_URL + "/pizzeria");
-  }
-
-
-
   getUserLocation(): void {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          this.userLocation = {
+          this.userLocationSubject.next({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
-          };
-          console.log("Position de l'utilisateur :", this.userLocation);
+          });
         },
-        (error) => {
-          console.error("Erreur de géolocalisation :", error);
+        () => {
+          console.warn("Géolocalisation impossible.");
+          this.userLocationSubject.next(null);
         }
       );
-    } else {
-      console.warn("La géolocalisation n'est pas supportée par ce navigateur.");
     }
   }
 
-
-
   getPizzeriasWithDistance(): Observable<PizzeriaDistanceDtoModel[]> {
-    if (!this.userLocation) return of([]);
-    const { latitude, longitude } = this.userLocation;
-    return this._http.get<PizzeriaDistanceDtoModel[]>(`${environment.API_URL}/pizzeria/with-distance?lat=${latitude}&lon=${longitude}`);
+    return this.userLocation$.pipe(
+      switchMap(location => {
+        if (!location) return of([]);
+        const url = `${environment.API_URL}/pizzeria/with-distance?lat=${location.latitude}&lon=${location.longitude}`;
+        return this._http.get<PizzeriaDistanceDtoModel[]>(url);
+      })
+    );
   }
-
 }
